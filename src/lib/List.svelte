@@ -1,26 +1,35 @@
 <script lang="ts">
-  import { Habitats } from "../enums/habitats";
-  import { Table } from "sveltestrap";
-  import type { AnimalsModel } from "@/models/Animals";
-  export let animals: AnimalsModel[] = [];
-  export let habitat: Habitats = Habitats.ALL;
-  $: filterItems = animals.filter(
-    (item: any) => item.life_habitat === habitat || habitat === Habitats.ALL
-  );
+  import { Button, Table } from "sveltestrap";
+  import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
+
+  export let users = [];
+  function handleClick(id: string) {
+    dispatch('viewDetails', { id });
+  }
 </script>
 
 <Table>
   <thead>
     <tr>
       <th>#</th>
-      <th>Animal</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
-    {#each filterItems as animal, i}
+    {#each users as user, i}
       <tr>
         <th scope="row">{i + 1}</th>
-        <td>{animal.name}</td>
+        <td>{user.name}</td>
+        <td>{user.email}</td>
+        <td>{user.phone}</td>
+        <td>
+          <Button outline color="primary" on:click={() => handleClick(user.id)}>View</Button>
+        </td>
       </tr>
     {/each}
   </tbody>
